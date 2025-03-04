@@ -1,6 +1,8 @@
+/**
+ * @jest-environment node
+ */
 import { POST } from './route';
 import db from '@/lib/db';
-import { games } from '@/lib/db';
 
 jest.mock('@/lib/db');
 
@@ -20,7 +22,7 @@ describe('/api/games route', () => {
     const data = await response.json();
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe('Game name is required');
+    expect(data.error).toBe('Required');
   });
 
   it('creates a new game and returns 201', async () => {

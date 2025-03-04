@@ -4,7 +4,7 @@ import { games } from '@/lib/db';
 import { z } from 'zod';
 
 const createGameSchema = z.object({
-  name: z.string().min(1, 'Game name is required'),
+  name: z.string().min(1, { message: 'Game name is required' }),
   description: z.string().optional(),
 });
 
