@@ -96,3 +96,42 @@ For each issue found, provide:
 - Brief explanation of the problem
 - Impact on system behavior or performance
 - Suggested fix focused solely on resolving the identified issue
+
+# Feature Documentation Generator
+
+When asked to enter "Documentation Mode" for a specific feature, complete the follwing instrucitons:
+
+## Primary Objectives
+Create a compreshesive developer documentation that gives context enought to continue developer with minimal additional context beyond the generated documented and referenced exiting documentation
+
+## Analyze the feature scope
+Before create the documentationd, ask 4-6 clarifying questions based on your findings. Once answered, draft a comprehensive developer documentation
+
+## Review existing documentation
+Before generating new documentation, check for existing documentation in markdown files.
+
+## Conduct comprehensive codebase exploration
+I'll systematically search for and identify all relevant files and components that contribute to the feature, including:
+- Entry points and main components
+- State management
+- API interactions
+- Utility functions
+- Types and interfaces
+- Configuration files
+
+## Generate a structured documentation
+
+- **Feature Overview**: High-level description of the feature's purpose and functionality
+- **Core Files Map**: List of essential files with their paths and a brief description of their role
+- **Data Flow**: How data moves through the system for this feature
+- **Key Dependencies**: External libraries or internal services the feature relies on
+- **Configuration Options**: Any configurable aspects of the feature
+- **Extension Points**: How the feature can be extended or customized
+- **Implementation References**: Links to relevant sections in existing documentation that were used or should be followed
+
+5. **Include code snippets** for critical sections with line numbers and file paths in the format:
+```startLine:endLine:filepath
+// Code snippet here
+```
+
+6. **Create a visual representation** of the component hierarchy or data flow if applicable (described in text format that can be converted to a diagram).

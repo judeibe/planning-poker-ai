@@ -1,14 +1,15 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function GameFormCard({
-  children
-}: {
-  children: React.ReactNode
-}) {
+interface GameFormCardProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+export function GameFormCard({ title, children }: GameFormCardProps) {
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>Create New Game</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
         {children}

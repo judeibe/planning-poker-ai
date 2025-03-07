@@ -10,57 +10,74 @@ jest.mock('next/navigation', () => ({
 
 describe('CreateGameForm', () => {
   const mockPush = jest.fn();
+  const localStorageMock = (() => {
+    let store: Record<string, string> = {};
+    return {
+      getItem: jest.fn((key: string) => store[key] || null),
+      setItem: jest.fn((key: string, value: string) => {
+        store[key] = value;
+      }),
+      clear: jest.fn(() => {
+        store = {};
+      }),
+    };
+  })();
+  
+  Object.defineProperty(window, 'localStorage', { value: localStorageMock });
 
   beforeEach(() => {
     (useRouter as jest.Mock).mockReturnValue({
       push: mockPush,
     });
+    jest.clearAllMocks();
+    localStorageMock.clear();
   });
 
-  it('renders form fields correctly', () => {
+  it('renders form correctly', () => {
     render(<CreateGameForm />);
-    expect(screen.getByLabelText(/Game Name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Description/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Create Game/i })).toBeInTheDocument();
   });
-
-  it('shows validation error when game name is not provided', async () => {
-    render(<CreateGameForm />);
-    fireEvent.click(screen.getByRole('button', { name: /Create Game/i }));
-    await waitFor(() => {
-      expect(screen.getByText(/Game name is required/i)).toBeInTheDocument();
-    });
-  });
-
-  it('submits form with valid data', async () => {
+  
+  it('submits form and creates new game', async () => {
     const mockFetch = jest.fn().mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ id: '123' }),
     });
     global.fetch = mockFetch;
-
+    
     render(<CreateGameForm />);
-    
-    fireEvent.change(screen.getByLabelText(/Game Name/i), {
-      target: { value: 'Test Game' },
-    });
-    
-    fireEvent.change(screen.getByLabelText(/Description/i), {
-      target: { value: 'Test Description' },
-    });
-
     fireEvent.click(screen.getByRole('button', { name: /Create Game/i }));
-
+    
     await waitFor(() => {
       expect(mockFetch).toHaveBeenCalledWith('/api/games', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: 'Test Game',
-          description: 'Test Description',
-        }),
+        body: JSON.stringify({}),
       });
       expect(mockPush).toHaveBeenCalledWith('/games/123');
+    });
+  });
+  
+  it('adds new game to recent sessions in localStorage', async () => {
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({ id: '123' }),
+    });
+    global.fetch = mockFetch;
+    
+    render(<CreateGameForm />);
+    
+    fireEvent.click(screen.getByRole('button', { name: /Create Game/i }));
+    
+    await waitFor(() => {
+      expect(localStorageMock.setItem).toHaveBeenCalled();
+      const recentSessionsCall = localStorageMock.setItem.mock.calls.find(
+        call => call[0] === 'recentSessions'
+      );
+      expect(recentSessionsCall).toBeTruthy();
+      
+      const savedSessions = JSON.parse(recentSessionsCall[1]);
+      expect(savedSessions[0].id).toBe('123');
     });
   });
 });

@@ -7,6 +7,15 @@
     "github.copilot.chat.languageContext.typescript.enabled": true,
     "github.copilot.chat.search.semanticTextResults": true,
     "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+    "github.copilot.chat.agent.runTasks": true,
+    "github.copilot.chat.followUps": "always",
+    "github.copilot.chat.newWorkspaceCreation.enabled": true,
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.codeGeneration.instructions": [
+        {
+            "file": ".github/codeGeneration-instructions.md"
+        },
+    ],
     "inlineChat.finishOnType": true,
     "inlineChat.lineEmptyHint": true,
     "github.copilot.chat.commitMessageGeneration.instructions": [

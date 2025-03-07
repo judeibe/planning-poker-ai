@@ -13,7 +13,7 @@ const db = drizzle(pool);
 // Define the Games table schema
 export const games = pgTable('games', {
   id: uuid('id').primaryKey().defaultRandom(),
-  name: text('name').notNull(),
+  name: text('name'), // Removed .notNull()
   description: text('description'),
 });
 
